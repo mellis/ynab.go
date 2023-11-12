@@ -8,9 +8,9 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/brunomvsouza/ynab.go"
-	"github.com/brunomvsouza/ynab.go/api"
-	"github.com/brunomvsouza/ynab.go/api/transaction"
+	"github.com/mellis/ynab.go"
+	"github.com/mellis/ynab.go/api"
+	"github.com/mellis/ynab.go/api/transaction"
 )
 
 func ExampleService_CreateTransaction() {

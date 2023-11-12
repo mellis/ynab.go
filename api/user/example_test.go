@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/brunomvsouza/ynab.go"
+	"github.com/mellis/ynab.go"
 )
 
 func ExampleService_GetUser() {
