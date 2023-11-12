@@ -5,6 +5,7 @@
 package user_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -35,7 +36,7 @@ func TestService_GetUser(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	u, err := client.User().GetUser()
+	u, err := client.User().GetUser(context.Background())
 	assert.NoError(t, err)
 
 	expected := &user.User{

@@ -5,6 +5,7 @@
 package transaction_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"testing"
@@ -67,7 +68,7 @@ func TestService_GetTransactions(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	transactions, err := client.Transaction().GetTransactions("aa248caa-eed7-4575-a990-717386438d2c", nil)
+	transactions, err := client.Transaction().GetTransactions(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", nil)
 	assert.NoError(t, err)
 
 	expectedDate, err := api.DateFromString("2018-03-10")
@@ -162,7 +163,7 @@ func TestService_GetTransaction(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	tx, err := client.Transaction().GetTransaction(
+	tx, err := client.Transaction().GetTransaction(context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"e6ad88f5-6f16-4480-9515-5377012750dd",
 	)
@@ -260,7 +261,7 @@ func TestService_GetTransactionsByAccount(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	transactions, err := client.Transaction().GetTransactionsByAccount(
+	transactions, err := client.Transaction().GetTransactionsByAccount(context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"09eaca5e-6f16-4480-9515-828fb90638f2",
 		nil,
@@ -352,6 +353,7 @@ func TestService_GetTransactionsByCategory(t *testing.T) {
 
 	client := ynab.NewClient("")
 	transactions, err := client.Transaction().GetTransactionsByCategory(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"a33c906e-444c-469c-be27-04c8e0c9959f",
 		nil,
@@ -429,6 +431,7 @@ func TestService_GetTransactionsByPayee(t *testing.T) {
 
 	client := ynab.NewClient("")
 	transactions, err := client.Transaction().GetTransactionsByPayee(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"b391144e-444c-469c-be27-fed6aa352a7a",
 		nil,
@@ -504,6 +507,7 @@ func TestService_GetScheduledTransactions(t *testing.T) {
 
 	client := ynab.NewClient("")
 	transactions, err := client.Transaction().GetScheduledTransactions(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c")
 	assert.NoError(t, err)
 
@@ -576,6 +580,7 @@ func TestService_GetScheduledTransaction(t *testing.T) {
 
 	client := ynab.NewClient("")
 	stx, err := client.Transaction().GetScheduledTransaction(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"56f4fc86-2ed7-4b3b-9116-7a214261b3cd",
 	)
@@ -678,7 +683,7 @@ func TestService_CreateTransaction(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	tx, err := client.Transaction().CreateTransaction("aa248caa-eed7-4575-a990-717386438d2c", payload)
+	tx, err := client.Transaction().CreateTransaction(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", payload)
 	assert.NoError(t, err)
 
 	expectedCategoryName := "Groceries"
@@ -811,7 +816,7 @@ func TestService_CreateTransactions(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	tx, err := client.Transaction().CreateTransactions("aa248caa-eed7-4575-a990-717386438d2c", payload)
+	tx, err := client.Transaction().CreateTransactions(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", payload)
 	assert.NoError(t, err)
 
 	expectedCategoryName := "Groceries"
@@ -966,7 +971,7 @@ func TestService_UpdateTransactions(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	tx, err := client.Transaction().UpdateTransactions("aa248caa-eed7-4575-a990-717386438d2c", payload)
+	tx, err := client.Transaction().UpdateTransactions(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", payload)
 	assert.NoError(t, err)
 
 	expectedCategoryName := "Groceries"
@@ -1086,6 +1091,7 @@ func TestService_BulkCreateTransactions(t *testing.T) {
 
 	client := ynab.NewClient("")
 	bulk, err := client.Transaction().BulkCreateTransactions(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		payload,
 	)
@@ -1164,6 +1170,7 @@ func TestService_UpdateTransaction(t *testing.T) {
 
 	client := ynab.NewClient("")
 	tx, err := client.Transaction().UpdateTransaction(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"0f5b3f73-ded2-4dd7-8b01-c23022622cd6",
 		payload,

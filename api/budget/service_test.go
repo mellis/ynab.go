@@ -5,6 +5,7 @@
 package budget_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 	"time"
@@ -58,7 +59,7 @@ func TestService_GetBudgets(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		budgets, err := client.Budget().GetBudgets()
+		budgets, err := client.Budget().GetBudgets(context.Background())
 		assert.NoError(t, err)
 
 		expectedFirstMonth, err := api.DateFromString("2018-03-01")
@@ -126,7 +127,7 @@ func TestService_GetBudgets(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		budgets, err := client.Budget().GetBudgets()
+		budgets, err := client.Budget().GetBudgets(context.Background())
 		assert.NoError(t, err)
 
 		b := budgets[0]
@@ -166,7 +167,7 @@ func TestService_GetBudgets(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		budgets, err := client.Budget().GetBudgets()
+		budgets, err := client.Budget().GetBudgets(context.Background())
 		assert.NoError(t, err)
 
 		b := budgets[0]
@@ -336,7 +337,7 @@ func TestService_GetBudget(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		_, err := client.Budget().GetBudget("aa248caa-eed7-4575-a990-717386438d2c", nil)
+		_, err := client.Budget().GetBudget(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", nil)
 		assert.NoError(t, err)
 	})
 
@@ -497,7 +498,7 @@ func TestService_GetBudget(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		_, err := client.Budget().GetBudget("aa248caa-eed7-4575-a990-717386438d2c", nil)
+		_, err := client.Budget().GetBudget(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", nil)
 		assert.NoError(t, err)
 	})
 
@@ -651,7 +652,7 @@ func TestService_GetBudget(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		_, err := client.Budget().GetBudget("aa248caa-eed7-4575-a990-717386438d2c", nil)
+		_, err := client.Budget().GetBudget(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", nil)
 		assert.NoError(t, err)
 	})
 }
@@ -815,7 +816,7 @@ func TestService_GetLastUsedBudget(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	_, err := client.Budget().GetLastUsedBudget(nil)
+	_, err := client.Budget().GetLastUsedBudget(context.Background(), nil)
 	assert.NoError(t, err)
 }
 
@@ -852,7 +853,7 @@ func TestService_GetBudgetSettings(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		settings, err := client.Budget().GetBudgetSettings("aa248caa-eed7-4575-a990-717386438d2c")
+		settings, err := client.Budget().GetBudgetSettings(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c")
 		assert.NoError(t, err)
 
 		expected := &budget.Settings{
@@ -904,7 +905,7 @@ func TestService_GetBudgetSettings(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		settings, err := client.Budget().GetBudgetSettings("aa248caa-eed7-4575-a990-717386438d2c")
+		settings, err := client.Budget().GetBudgetSettings(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c")
 		assert.NoError(t, err)
 
 		expected := &budget.Settings{
@@ -946,7 +947,7 @@ func TestService_GetBudgetSettings(t *testing.T) {
 		)
 
 		client := ynab.NewClient("")
-		settings, err := client.Budget().GetBudgetSettings("aa248caa-eed7-4575-a990-717386438d2c")
+		settings, err := client.Budget().GetBudgetSettings(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c")
 		assert.NoError(t, err)
 
 		expected := &budget.Settings{

@@ -5,6 +5,7 @@
 package ynab_test
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 
@@ -13,7 +14,7 @@ import (
 
 func ExampleNewClient() {
 	c := ynab.NewClient("<valid_ynab_access_token>")
-	c.User().GetUser() //nolint:errcheck
+	c.User().GetUser(context.Background()) //nolint:errcheck
 }
 
 func ExampleClientServicer_User() {

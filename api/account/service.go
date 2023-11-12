@@ -5,6 +5,7 @@
 package account
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mellis/ynab.go/api"
@@ -22,7 +23,7 @@ type Service struct {
 
 // GetAccounts fetches the list of accounts from a budget
 // https://api.youneedabudget.com/v1#/Accounts/getAccounts
-func (s *Service) GetAccounts(budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
+func (s *Service) GetAccounts(ctx context.Context, budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
 	resModel := struct {
 		Data struct {
 			Accounts        []*Account `json:"accounts"`
@@ -34,7 +35,7 @@ func (s *Service) GetAccounts(budgetID string, f *api.Filter) (*SearchResultSnap
 	if f != nil {
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +47,7 @@ func (s *Service) GetAccounts(budgetID string, f *api.Filter) (*SearchResultSnap
 
 // GetAccount fetches a specific account from a budget
 // https://api.youneedabudget.com/v1#/Accounts/getAccountById
-func (s *Service) GetAccount(budgetID, accountID string) (*Account, error) {
+func (s *Service) GetAccount(ctx context.Context, budgetID string, accountID string) (*Account, error) {
 	resModel := struct {
 		Data struct {
 			Account *Account `json:"account"`
@@ -54,7 +55,7 @@ func (s *Service) GetAccount(budgetID, accountID string) (*Account, error) {
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/accounts/%s", budgetID, accountID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Account, nil

@@ -5,6 +5,7 @@
 package category_test
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"testing"
@@ -64,7 +65,7 @@ func TestService_GetCategories(t *testing.T) {
 
 	client := ynab.NewClient("")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	snapshot, err := client.Category().GetCategories("aa248caa-eed7-4575-a990-717386438d2c", f)
+	snapshot, err := client.Category().GetCategories(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", f)
 	assert.NoError(t, err)
 
 	var (
@@ -144,6 +145,7 @@ func TestService_GetCategory(t *testing.T) {
 
 	client := ynab.NewClient("")
 	c, err := client.Category().GetCategory(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"13419c12-78d3-4a26-82ca-1cde7aa1d6f8",
 	)
@@ -215,6 +217,7 @@ func TestService_GetCategoryForMonth(t *testing.T) {
 
 	client := ynab.NewClient("")
 	c, err := client.Category().GetCategoryForMonth(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"13419c12-78d3-4a26-82ca-1cde7aa1d6f8",
 		date,
@@ -284,6 +287,7 @@ func TestService_GetCategoryForCurrentMonth(t *testing.T) {
 
 	client := ynab.NewClient("")
 	c, err := client.Category().GetCategoryForCurrentMonth(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"13419c12-78d3-4a26-82ca-1cde7aa1d6f8",
 	)
@@ -363,6 +367,7 @@ func TestService_UpdateCategoryForMonth(t *testing.T) {
 
 	client := ynab.NewClient("")
 	c, err := client.Category().UpdateCategoryForMonth(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"13419c12-78d3-4a26-82ca-1cde7aa1d6f8",
 		api.Date{},
@@ -444,6 +449,7 @@ func TestService_UpdateCategoryForCurrentMonth(t *testing.T) {
 
 	client := ynab.NewClient("")
 	c, err := client.Category().UpdateCategoryForCurrentMonth(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"13419c12-78d3-4a26-82ca-1cde7aa1d6f8",
 		payload,

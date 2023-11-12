@@ -1,6 +1,7 @@
 package account_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -48,7 +49,7 @@ func TestService_GetAccounts(t *testing.T) {
 
 	client := ynab.NewClient("")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	snapshot, err := client.Account().GetAccounts("bbdccdb0-9007-42aa-a6fe-02a3e94476be", f)
+	snapshot, err := client.Account().GetAccounts(context.Background(), "bbdccdb0-9007-42aa-a6fe-02a3e94476be", f)
 	assert.NoError(t, err)
 
 	note := "omg omg omg"
@@ -103,6 +104,7 @@ func TestService_GetAccount(t *testing.T) {
 
 	client := ynab.NewClient("")
 	a, err := client.Account().GetAccount(
+		context.Background(),
 		"bbdccdb0-9007-42aa-a6fe-02a3e94476be",
 		"aa248caa-eed7-4575-a990-717386438d2c",
 	)

@@ -5,6 +5,7 @@
 package month
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mellis/ynab.go/api"
@@ -22,7 +23,7 @@ type Service struct {
 
 // GetMonths fetches the list of months from a budget
 // https://api.youneedabudget.com/v1#/Months/getBudgetMonths
-func (s *Service) GetMonths(budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
+func (s *Service) GetMonths(ctx context.Context, budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
 	resModel := struct {
 		Data struct {
 			Months          []*Summary `json:"months"`
@@ -35,7 +36,7 @@ func (s *Service) GetMonths(budgetID string, f *api.Filter) (*SearchResultSnapsh
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return &SearchResultSnapshot{
@@ -46,7 +47,7 @@ func (s *Service) GetMonths(budgetID string, f *api.Filter) (*SearchResultSnapsh
 
 // GetMonth fetches a specific month from a budget
 // https://api.youneedabudget.com/v1#/Months/getBudgetMonth
-func (s *Service) GetMonth(budgetID string, month api.Date) (*Month, error) {
+func (s *Service) GetMonth(ctx context.Context, budgetID string, month api.Date) (*Month, error) {
 	resModel := struct {
 		Data struct {
 			Month *Month `json:"month"`
@@ -55,7 +56,7 @@ func (s *Service) GetMonth(budgetID string, month api.Date) (*Month, error) {
 
 	url := fmt.Sprintf("/budgets/%s/months/%s", budgetID,
 		api.DateFormat(month))
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Month, nil

@@ -7,6 +7,7 @@ package ynab // import "github.com/mellis/ynab.go"
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -40,10 +41,13 @@ type ClientServicer interface {
 }
 
 // NewClient facilitates the creation of a new client instance
-func NewClient(accessToken string) ClientServicer {
+func NewClient(accessToken string, options ...func(*client)) ClientServicer {
 	c := &client{
 		accessToken: accessToken,
 		client:      http.DefaultClient,
+	}
+	for _, o := range options {
+		o(c)
 	}
 
 	c.user = user.NewService(c)
@@ -116,29 +120,29 @@ func (c *client) RateLimit() *api.RateLimit {
 }
 
 // GET sends a GET request to the YNAB API
-func (c *client) GET(url string, responseModel interface{}) error {
-	return c.do(http.MethodGet, url, responseModel, nil)
+func (c *client) GET(ctx context.Context, url string, responseModel interface{}) error {
+	return c.do(ctx, http.MethodGet, url, responseModel, nil)
 }
 
 // POST sends a POST request to the YNAB API
-func (c *client) POST(url string, responseModel interface{}, requestBody []byte) error {
-	return c.do(http.MethodPost, url, responseModel, requestBody)
+func (c *client) POST(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+	return c.do(ctx, http.MethodPost, url, responseModel, requestBody)
 }
 
 // PUT sends a PUT request to the YNAB API
-func (c *client) PUT(url string, responseModel interface{}, requestBody []byte) error {
-	return c.do(http.MethodPut, url, responseModel, requestBody)
+func (c *client) PUT(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+	return c.do(ctx, http.MethodPut, url, responseModel, requestBody)
 }
 
 // PATCH sends a PATCH request to the YNAB API
-func (c *client) PATCH(url string, responseModel interface{}, requestBody []byte) error {
-	return c.do(http.MethodPatch, url, responseModel, requestBody)
+func (c *client) PATCH(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+	return c.do(ctx, http.MethodPatch, url, responseModel, requestBody)
 }
 
 // do sends a request to the YNAB API
-func (c *client) do(method, url string, responseModel interface{}, requestBody []byte) error {
+func (c *client) do(ctx context.Context, method, url string, responseModel interface{}, requestBody []byte) error {
 	fullURL := fmt.Sprintf("%s%s", apiEndpoint, url)
-	req, err := http.NewRequest(method, fullURL, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequestWithContext(ctx, method, fullURL, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return err
 	}

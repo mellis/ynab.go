@@ -5,6 +5,7 @@
 package user_test
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 
@@ -13,7 +14,7 @@ import (
 
 func ExampleService_GetUser() {
 	c := ynab.NewClient("<valid_ynab_access_token>")
-	user, _ := c.User().GetUser()
+	user, _ := c.User().GetUser(context.Background())
 	fmt.Println(reflect.TypeOf(user))
 
 	// Output: *user.User

@@ -5,6 +5,7 @@
 package transaction
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -25,7 +26,7 @@ type Service struct {
 // GetTransactions fetches the list of transactions from
 // a budget with filtering capabilities
 // https://api.youneedabudget.com/v1#/Transactions/getTransactions
-func (s *Service) GetTransactions(budgetID string, f *Filter) ([]*Transaction, error) {
+func (s *Service) GetTransactions(ctx context.Context, budgetID string, f *Filter) ([]*Transaction, error) {
 	resModel := struct {
 		Data struct {
 			Transactions []*Transaction `json:"transactions"`
@@ -37,7 +38,7 @@ func (s *Service) GetTransactions(budgetID string, f *Filter) ([]*Transaction, e
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -46,7 +47,7 @@ func (s *Service) GetTransactions(budgetID string, f *Filter) ([]*Transaction, e
 
 // GetTransaction fetches a specific transaction from a budget
 // https://api.youneedabudget.com/v1#/Transactions/getTransactionsById
-func (s *Service) GetTransaction(budgetID, transactionID string) (*Transaction, error) {
+func (s *Service) GetTransaction(ctx context.Context, budgetID string, transactionID string) (*Transaction, error) {
 	resModel := struct {
 		Data struct {
 			Transaction *Transaction `json:"transaction"`
@@ -54,7 +55,7 @@ func (s *Service) GetTransaction(budgetID, transactionID string) (*Transaction, 
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/%s", budgetID, transactionID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Transaction, nil
@@ -62,15 +63,15 @@ func (s *Service) GetTransaction(budgetID, transactionID string) (*Transaction, 
 
 // CreateTransaction creates a new transaction for a budget
 // https://api.youneedabudget.com/v1#/Transactions/createTransaction
-func (s *Service) CreateTransaction(budgetID string,
+func (s *Service) CreateTransaction(ctx context.Context, budgetID string,
 	p PayloadTransaction) (*OperationSummary, error) {
 
-	return s.CreateTransactions(budgetID, []PayloadTransaction{p})
+	return s.CreateTransactions(ctx, budgetID, []PayloadTransaction{p})
 }
 
 // CreateTransactions creates one or more new transactions for a budget
 // https://api.youneedabudget.com/v1#/Transactions/createTransaction
-func (s *Service) CreateTransactions(budgetID string,
+func (s *Service) CreateTransactions(ctx context.Context, budgetID string,
 	p []PayloadTransaction) (*OperationSummary, error) {
 
 	payload := struct {
@@ -89,7 +90,7 @@ func (s *Service) CreateTransactions(budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions", budgetID)
-	err = s.c.POST(url, &resModel, buf)
+	err = s.c.POST(ctx, url, &resModel, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +100,7 @@ func (s *Service) CreateTransactions(budgetID string,
 // BulkCreateTransactions creates multiple transactions for a budget
 // https://api.youneedabudget.com/v1#/Transactions/bulkCreateTransactions
 // Deprecated: Use transaction.CreateTransactions instead.
-func (s *Service) BulkCreateTransactions(budgetID string,
+func (s *Service) BulkCreateTransactions(ctx context.Context, budgetID string,
 	ps []PayloadTransaction) (*Bulk, error) {
 
 	payload := struct {
@@ -120,7 +121,7 @@ func (s *Service) BulkCreateTransactions(budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/bulk", budgetID)
-	if err := s.c.POST(url, &resModel, buf); err != nil {
+	if err := s.c.POST(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Bulk, nil
@@ -128,7 +129,7 @@ func (s *Service) BulkCreateTransactions(budgetID string,
 
 // UpdateTransaction updates a whole transaction for a replacement
 // https://api.youneedabudget.com/v1#/Transactions/updateTransaction
-func (s *Service) UpdateTransaction(budgetID, transactionID string,
+func (s *Service) UpdateTransaction(ctx context.Context, budgetID string, transactionID string,
 	p PayloadTransaction) (*Transaction, error) {
 
 	payload := struct {
@@ -149,7 +150,7 @@ func (s *Service) UpdateTransaction(budgetID, transactionID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/%s", budgetID, transactionID)
-	if err := s.c.PUT(url, &resModel, buf); err != nil {
+	if err := s.c.PUT(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Transaction, nil
@@ -157,7 +158,7 @@ func (s *Service) UpdateTransaction(budgetID, transactionID string,
 
 // UpdateTransactions creates one or more new transactions for a budget
 // https://api.youneedabudget.com/v1#/Transactions/updateTransactions
-func (s *Service) UpdateTransactions(budgetID string,
+func (s *Service) UpdateTransactions(ctx context.Context, budgetID string,
 	p []PayloadTransaction) (*OperationSummary, error) {
 
 	payload := struct {
@@ -176,7 +177,7 @@ func (s *Service) UpdateTransactions(budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions", budgetID)
-	err = s.c.PATCH(url, &resModel, buf)
+	err = s.c.PATCH(ctx, url, &resModel, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +187,7 @@ func (s *Service) UpdateTransactions(budgetID string,
 // GetTransactionsByAccount fetches the list of transactions of a specific account
 // from a budget with filtering capabilities
 // https://api.youneedabudget.com/v1#/Transactions/getTransactionsByAccount
-func (s *Service) GetTransactionsByAccount(budgetID, accountID string,
+func (s *Service) GetTransactionsByAccount(ctx context.Context, budgetID string, accountID string,
 	f *Filter) ([]*Transaction, error) {
 
 	resModel := struct {
@@ -200,7 +201,7 @@ func (s *Service) GetTransactionsByAccount(budgetID, accountID string,
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -210,7 +211,7 @@ func (s *Service) GetTransactionsByAccount(budgetID, accountID string,
 // GetTransactionsByCategory fetches the list of transactions of a specific category
 // from a budget with filtering capabilities
 // https://api.youneedabudget.com/v1#/Transactions/getTransactionsByCategory
-func (s *Service) GetTransactionsByCategory(budgetID, categoryID string,
+func (s *Service) GetTransactionsByCategory(ctx context.Context, budgetID string, categoryID string,
 	f *Filter) ([]*Hybrid, error) {
 
 	resModel := struct {
@@ -224,7 +225,7 @@ func (s *Service) GetTransactionsByCategory(budgetID, categoryID string,
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -234,7 +235,7 @@ func (s *Service) GetTransactionsByCategory(budgetID, categoryID string,
 // GetTransactionsByPayee fetches the list of transactions of a specific payee
 // from a budget with filtering capabilities
 // https://api.youneedabudget.com/v1#/Transactions/getTransactionsByPayee
-func (s *Service) GetTransactionsByPayee(budgetID, payeeID string,
+func (s *Service) GetTransactionsByPayee(ctx context.Context, budgetID string, payeeID string,
 	f *Filter) ([]*Hybrid, error) {
 
 	resModel := struct {
@@ -248,7 +249,7 @@ func (s *Service) GetTransactionsByPayee(budgetID, payeeID string,
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -257,8 +258,8 @@ func (s *Service) GetTransactionsByPayee(budgetID, payeeID string,
 
 // GetScheduledTransactions fetches the list of scheduled transactions from
 // a budget
-//https://api.youneedabudget.com/v1#/Scheduled_Transactions/getScheduledTransactions
-func (s *Service) GetScheduledTransactions(budgetID string) ([]*Scheduled, error) {
+// https://api.youneedabudget.com/v1#/Scheduled_Transactions/getScheduledTransactions
+func (s *Service) GetScheduledTransactions(ctx context.Context, budgetID string) ([]*Scheduled, error) {
 	resModel := struct {
 		Data struct {
 			ScheduledTransactions []*Scheduled `json:"scheduled_transactions"`
@@ -266,7 +267,7 @@ func (s *Service) GetScheduledTransactions(budgetID string) ([]*Scheduled, error
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/scheduled_transactions", budgetID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -275,7 +276,7 @@ func (s *Service) GetScheduledTransactions(budgetID string) ([]*Scheduled, error
 
 // GetScheduledTransaction fetches a specific scheduled transaction from a budget
 // https://api.youneedabudget.com/v1#/Scheduled_Transactions/getScheduledTransactionById
-func (s *Service) GetScheduledTransaction(budgetID, scheduledTransactionID string) (*Scheduled, error) {
+func (s *Service) GetScheduledTransaction(ctx context.Context, budgetID, scheduledTransactionID string) (*Scheduled, error) {
 	resModel := struct {
 		Data struct {
 			ScheduledTransactions *Scheduled `json:"scheduled_transaction"`
@@ -283,7 +284,7 @@ func (s *Service) GetScheduledTransaction(budgetID, scheduledTransactionID strin
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/scheduled_transactions/%s", budgetID, scheduledTransactionID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.ScheduledTransactions, nil

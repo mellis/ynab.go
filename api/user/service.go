@@ -5,6 +5,8 @@
 package user
 
 import (
+	"context"
+
 	"github.com/mellis/ynab.go/api"
 )
 
@@ -20,14 +22,14 @@ type Service struct {
 
 // GetUser fetches information about the authenticated user
 // https://api.youneedabudget.com/v1#/User/getUser
-func (s *Service) GetUser() (*User, error) {
+func (s *Service) GetUser(ctx context.Context) (*User, error) {
 	resModel := struct {
 		Data struct {
 			User *User `json:"user"`
 		} `json:"data"`
 	}{}
 
-	if err := s.c.GET("/user", &resModel); err != nil {
+	if err := s.c.GET(ctx, "/user", &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.User, nil

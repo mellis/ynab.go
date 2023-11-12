@@ -5,6 +5,7 @@
 package payee
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mellis/ynab.go/api"
@@ -22,7 +23,7 @@ type Service struct {
 
 // GetPayees fetches the list of payees from a budget
 // https://api.youneedabudget.com/v1#/Payees/getPayees
-func (s *Service) GetPayees(budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
+func (s *Service) GetPayees(ctx context.Context, budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
 	resModel := struct {
 		Data struct {
 			Payees          []*Payee `json:"payees"`
@@ -35,7 +36,7 @@ func (s *Service) GetPayees(budgetID string, f *api.Filter) (*SearchResultSnapsh
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return &SearchResultSnapshot{
@@ -46,7 +47,7 @@ func (s *Service) GetPayees(budgetID string, f *api.Filter) (*SearchResultSnapsh
 
 // GetPayee fetches a specific payee from a budget
 // https://api.youneedabudget.com/v1#/Payees/getPayeeById
-func (s *Service) GetPayee(budgetID, payeeID string) (*Payee, error) {
+func (s *Service) GetPayee(ctx context.Context, budgetID string, payeeID string) (*Payee, error) {
 	resModel := struct {
 		Data struct {
 			Payee *Payee `json:"payee"`
@@ -54,7 +55,7 @@ func (s *Service) GetPayee(budgetID, payeeID string) (*Payee, error) {
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payees/%s", budgetID, payeeID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Payee, nil
@@ -62,7 +63,7 @@ func (s *Service) GetPayee(budgetID, payeeID string) (*Payee, error) {
 
 // GetPayeeLocations fetches the list of payee locations from a budget
 // https://api.youneedabudget.com/v1#/Payee_Locations/getPayeeLocations
-func (s *Service) GetPayeeLocations(budgetID string) ([]*Location, error) {
+func (s *Service) GetPayeeLocations(ctx context.Context, budgetID string) ([]*Location, error) {
 	resModel := struct {
 		Data struct {
 			PayeeLocations []*Location `json:"payee_locations"`
@@ -70,7 +71,7 @@ func (s *Service) GetPayeeLocations(budgetID string) ([]*Location, error) {
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payee_locations", budgetID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocations, nil
@@ -78,7 +79,7 @@ func (s *Service) GetPayeeLocations(budgetID string) ([]*Location, error) {
 
 // GetPayeeLocation fetches a specific payee location from a budget
 // https://api.youneedabudget.com/v1#/Payee_Locations/getPayeeLocationById
-func (s *Service) GetPayeeLocation(budgetID, payeeLocationID string) (*Location, error) {
+func (s *Service) GetPayeeLocation(ctx context.Context, budgetID string, payeeLocationID string) (*Location, error) {
 	resModel := struct {
 		Data struct {
 			PayeeLocation *Location `json:"payee_location"`
@@ -86,7 +87,7 @@ func (s *Service) GetPayeeLocation(budgetID, payeeLocationID string) (*Location,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payee_locations/%s", budgetID, payeeLocationID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocation, nil
@@ -94,7 +95,7 @@ func (s *Service) GetPayeeLocation(budgetID, payeeLocationID string) (*Location,
 
 // GetPayeeLocationsByPayee fetches the list of locations of a specific payee from a budget
 // https://api.youneedabudget.com/v1#/Payee_Locations/getPayeeLocationsByPayee
-func (s *Service) GetPayeeLocationsByPayee(budgetID, payeeID string) ([]*Location, error) {
+func (s *Service) GetPayeeLocationsByPayee(ctx context.Context, budgetID, payeeID string) ([]*Location, error) {
 	resModel := struct {
 		Data struct {
 			PayeeLocations []*Location `json:"payee_locations"`
@@ -102,7 +103,7 @@ func (s *Service) GetPayeeLocationsByPayee(budgetID, payeeID string) ([]*Locatio
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payees/%s/payee_locations", budgetID, payeeID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocations, nil

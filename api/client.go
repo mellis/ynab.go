@@ -6,16 +6,18 @@
 // the API services
 package api // import "github.com/mellis/ynab.go/api"
 
+import "context"
+
 // ClientReader contract for a read only client
 type ClientReader interface {
-	GET(url string, responseModel interface{}) error
+	GET(ctx context.Context, url string, responseModel interface{}) error
 }
 
 // ClientWriter contract for a write only client
 type ClientWriter interface {
-	POST(url string, responseModel interface{}, requestBody []byte) error
-	PUT(url string, responseModel interface{}, requestBody []byte) error
-	PATCH(url string, responseModel interface{}, requestBody []byte) error
+	POST(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
+	PUT(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
+	PATCH(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
 }
 
 // ClientReaderWriter contract for a read-write client

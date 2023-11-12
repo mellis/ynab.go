@@ -5,6 +5,7 @@
 package month_test
 
 import (
+	"context"
 	"net/http"
 	"testing"
 
@@ -46,7 +47,7 @@ func TestService_GetMonths(t *testing.T) {
 
 	client := ynab.NewClient("")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	snapshot, err := client.Month().GetMonths("aa248caa-eed7-4575-a990-717386438d2c", f)
+	snapshot, err := client.Month().GetMonths(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", f)
 	assert.NoError(t, err)
 
 	m := snapshot.Months[0]
@@ -99,7 +100,7 @@ func TestService_GetMonth(t *testing.T) {
 	assert.NoError(t, err)
 
 	client := ynab.NewClient("")
-	m, err := client.Month().GetMonth("aa248caa-eed7-4575-a990-717386438d2c", date)
+	m, err := client.Month().GetMonth(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", date)
 	assert.NoError(t, err)
 
 	var (

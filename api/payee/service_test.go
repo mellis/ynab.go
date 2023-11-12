@@ -5,6 +5,7 @@
 package payee_test
 
 import (
+	"context"
 	"net/http"
 	"strconv"
 	"testing"
@@ -46,7 +47,7 @@ func TestService_GetPayees(t *testing.T) {
 
 	client := ynab.NewClient("")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	snapshot, err := client.Payee().GetPayees("aa248caa-eed7-4575-a990-717386438d2c", f)
+	snapshot, err := client.Payee().GetPayees(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c", f)
 	assert.NoError(t, err)
 
 	expected := &payee.SearchResultSnapshot{
@@ -88,6 +89,7 @@ func TestService_GetPayee(t *testing.T) {
 
 	client := ynab.NewClient("")
 	p, err := client.Payee().GetPayee(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"34e88373-ef48-4386-9ab3-7f86c2a8988f",
 	)
@@ -129,7 +131,7 @@ func TestService_GetPayeeLocations(t *testing.T) {
 	)
 
 	client := ynab.NewClient("")
-	locations, err := client.Payee().GetPayeeLocations("aa248caa-eed7-4575-a990-717386438d2c")
+	locations, err := client.Payee().GetPayeeLocations(context.Background(), "aa248caa-eed7-4575-a990-717386438d2c")
 	assert.NoError(t, err)
 
 	latitude, err := strconv.ParseFloat("42.496348", 64)
@@ -177,6 +179,7 @@ func TestService_GetPayeeLocation(t *testing.T) {
 
 	client := ynab.NewClient("")
 	location, err := client.Payee().GetPayeeLocation(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"34fabc3-1234-4a11-8bcd-7f63756b7193",
 	)
@@ -227,6 +230,7 @@ func TestService_GetPayeeLocationsByPayee(t *testing.T) {
 
 	client := ynab.NewClient("")
 	locations, err := client.Payee().GetPayeeLocationsByPayee(
+		context.Background(),
 		"aa248caa-eed7-4575-a990-717386438d2c",
 		"34e88373-ef48-4386-9ab3-7f86c2a8988f",
 	)

@@ -5,6 +5,7 @@
 package category_test
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/mellis/ynab.go/api/category"
@@ -17,7 +18,7 @@ import (
 
 func ExampleService_GetCategory() {
 	client := ynab.NewClient("<valid_ynab_access_token>")
-	c, _ := client.Category().GetCategory("<valid_budget_id>", "<valid_category_id>")
+	c, _ := client.Category().GetCategory(context.Background(), "<valid_budget_id>", "<valid_category_id>")
 	fmt.Println(reflect.TypeOf(c))
 
 	// Output: *category.Category
@@ -26,7 +27,7 @@ func ExampleService_GetCategory() {
 func ExampleService_GetCategories() {
 	client := ynab.NewClient("<valid_ynab_access_token>")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	categories, _ := client.Category().GetCategories("<valid_budget_id>", f)
+	categories, _ := client.Category().GetCategories(context.Background(), "<valid_budget_id>", f)
 	fmt.Println(reflect.TypeOf(categories))
 
 	// Output: *category.SearchResultSnapshot
@@ -34,7 +35,7 @@ func ExampleService_GetCategories() {
 
 func ExampleService_GetCategoryForMonth() {
 	client := ynab.NewClient("<valid_ynab_access_token>")
-	c, _ := client.Category().GetCategoryForMonth("<valid_budget_id>",
+	c, _ := client.Category().GetCategoryForMonth(context.Background(), "<valid_budget_id>",
 		"<valid_category_id>", api.Date{})
 	fmt.Println(reflect.TypeOf(c))
 
@@ -43,7 +44,7 @@ func ExampleService_GetCategoryForMonth() {
 
 func ExampleService_GetCategoryForCurrentMonth() {
 	client := ynab.NewClient("<valid_ynab_access_token>")
-	c, _ := client.Category().GetCategoryForCurrentMonth("<valid_budget_id>",
+	c, _ := client.Category().GetCategoryForCurrentMonth(context.Background(), "<valid_budget_id>",
 		"<valid_category_id>")
 	fmt.Println(reflect.TypeOf(c))
 
@@ -55,7 +56,7 @@ func ExampleService_UpdateCategoryForMonth() {
 	validPayload := category.PayloadMonthCategory{Budgeted: 1000}
 
 	client := ynab.NewClient("<valid_ynab_access_token>")
-	c, _ := client.Category().UpdateCategoryForMonth("<valid_budget_id>",
+	c, _ := client.Category().UpdateCategoryForMonth(context.Background(), "<valid_budget_id>",
 		"<valid_category_id>", validMonth, validPayload)
 	fmt.Println(reflect.TypeOf(c))
 
@@ -66,7 +67,7 @@ func ExampleService_UpdateCategoryForCurrentMonth() {
 	validPayload := category.PayloadMonthCategory{Budgeted: 1000}
 
 	client := ynab.NewClient("<valid_ynab_access_token>")
-	c, _ := client.Category().UpdateCategoryForCurrentMonth("<valid_budget_id>",
+	c, _ := client.Category().UpdateCategoryForCurrentMonth(context.Background(), "<valid_budget_id>",
 		"<valid_category_id>", validPayload)
 	fmt.Println(reflect.TypeOf(c))
 

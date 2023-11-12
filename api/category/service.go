@@ -5,6 +5,7 @@
 package category
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -25,7 +26,7 @@ type Service struct {
 
 // GetCategories fetches the list of category groups for a budget
 // https://api.youneedabudget.com/v1#/Categories/getCategories
-func (s *Service) GetCategories(budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
+func (s *Service) GetCategories(ctx context.Context, budgetID string, f *api.Filter) (*SearchResultSnapshot, error) {
 	resModel := struct {
 		Data struct {
 			CategoryGroups  []*GroupWithCategories `json:"category_groups"`
@@ -37,7 +38,7 @@ func (s *Service) GetCategories(budgetID string, f *api.Filter) (*SearchResultSn
 	if f != nil {
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -49,7 +50,7 @@ func (s *Service) GetCategories(budgetID string, f *api.Filter) (*SearchResultSn
 
 // GetCategory fetches a specific category from a budget
 // https://api.youneedabudget.com/v1#/Categories/getCategoryById
-func (s *Service) GetCategory(budgetID, categoryID string) (*Category, error) {
+func (s *Service) GetCategory(ctx context.Context, budgetID string, categoryID string) (*Category, error) {
 	resModel := struct {
 		Data struct {
 			Category *Category `json:"category"`
@@ -57,7 +58,7 @@ func (s *Service) GetCategory(budgetID, categoryID string) (*Category, error) {
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/categories/%s", budgetID, categoryID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil
@@ -65,19 +66,19 @@ func (s *Service) GetCategory(budgetID, categoryID string) (*Category, error) {
 
 // GetCategoryForMonth fetches a specific category from a budget month
 // https://api.youneedabudget.com/v1#/Categories/getMonthCategoryById
-func (s *Service) GetCategoryForMonth(budgetID, categoryID string,
+func (s *Service) GetCategoryForMonth(ctx context.Context, budgetID string, categoryID string,
 	month api.Date) (*Category, error) {
 
-	return s.getCategoryForMonth(budgetID, categoryID, api.DateFormat(month))
+	return s.getCategoryForMonth(ctx, budgetID, categoryID, api.DateFormat(month))
 }
 
 // GetCategoryForCurrentMonth fetches a specific category from the current budget month
 // https://api.youneedabudget.com/v1#/Categories/getMonthCategoryById
-func (s *Service) GetCategoryForCurrentMonth(budgetID, categoryID string) (*Category, error) {
-	return s.getCategoryForMonth(budgetID, categoryID, currentMonthID)
+func (s *Service) GetCategoryForCurrentMonth(ctx context.Context, budgetID string, categoryID string) (*Category, error) {
+	return s.getCategoryForMonth(ctx, budgetID, categoryID, currentMonthID)
 }
 
-func (s *Service) getCategoryForMonth(budgetID, categoryID, month string) (*Category, error) {
+func (s *Service) getCategoryForMonth(ctx context.Context, budgetID string, categoryID, month string) (*Category, error) {
 	resModel := struct {
 		Data struct {
 			Category *Category `json:"category"`
@@ -85,7 +86,7 @@ func (s *Service) getCategoryForMonth(budgetID, categoryID, month string) (*Cate
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/months/%s/categories/%s", budgetID, month, categoryID)
-	if err := s.c.GET(url, &resModel); err != nil {
+	if err := s.c.GET(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil
@@ -93,21 +94,21 @@ func (s *Service) getCategoryForMonth(budgetID, categoryID, month string) (*Cate
 
 // UpdateCategoryForMonth updates a category for a month
 // https://api.youneedabudget.com/v1#/Categories/updateMonthCategory
-func (s *Service) UpdateCategoryForMonth(budgetID, categoryID string, month api.Date,
+func (s *Service) UpdateCategoryForMonth(ctx context.Context, budgetID string, categoryID string, month api.Date,
 	p PayloadMonthCategory) (*Category, error) {
 
-	return s.updateCategoryForMonth(budgetID, categoryID, api.DateFormat(month), p)
+	return s.updateCategoryForMonth(ctx, budgetID, categoryID, api.DateFormat(month), p)
 }
 
 // UpdateCategoryForCurrentMonth updates a category for the current month
 // https://api.youneedabudget.com/v1#/Categories/updateMonthCategory
-func (s *Service) UpdateCategoryForCurrentMonth(budgetID, categoryID string,
+func (s *Service) UpdateCategoryForCurrentMonth(ctx context.Context, budgetID string, categoryID string,
 	p PayloadMonthCategory) (*Category, error) {
 
-	return s.updateCategoryForMonth(budgetID, categoryID, currentMonthID, p)
+	return s.updateCategoryForMonth(ctx, budgetID, categoryID, currentMonthID, p)
 }
 
-func (s *Service) updateCategoryForMonth(budgetID, categoryID, month string,
+func (s *Service) updateCategoryForMonth(ctx context.Context, budgetID string, categoryID string, month string,
 	p PayloadMonthCategory) (*Category, error) {
 
 	payload := struct {
@@ -130,7 +131,7 @@ func (s *Service) updateCategoryForMonth(budgetID, categoryID, month string,
 	url := fmt.Sprintf("/budgets/%s/months/%s/categories/%s", budgetID,
 		month, categoryID)
 
-	if err := s.c.PUT(url, &resModel, buf); err != nil {
+	if err := s.c.PUT(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil

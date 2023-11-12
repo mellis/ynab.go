@@ -5,6 +5,7 @@
 package month_test
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 
@@ -16,7 +17,7 @@ import (
 func ExampleService_GetMonth() {
 	c := ynab.NewClient("<valid_ynab_access_token>")
 	d, _ := api.DateFromString("2010-01-01")
-	m, _ := c.Month().GetMonth("<valid_budget_id>", d)
+	m, _ := c.Month().GetMonth(context.Background(), "<valid_budget_id>", d)
 	fmt.Println(reflect.TypeOf(m))
 
 	// Output: *month.Month
@@ -26,7 +27,7 @@ func ExampleService_GetMonth() {
 func ExampleService_GetMonths() {
 	c := ynab.NewClient("<valid_ynab_access_token>")
 	f := &api.Filter{LastKnowledgeOfServer: 10}
-	months, _ := c.Month().GetMonths("<valid_budget_id>", f)
+	months, _ := c.Month().GetMonths(context.Background(), "<valid_budget_id>", f)
 	fmt.Println(reflect.TypeOf(months))
 
 	// Output: *month.SearchResultSnapshot
