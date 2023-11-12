@@ -29,7 +29,7 @@ func (s *Service) GetUser(ctx context.Context) (*User, error) {
 		} `json:"data"`
 	}{}
 
-	if err := s.c.GET(ctx, "/user", &resModel); err != nil {
+	if err := s.c.Get(ctx, "/user", &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.User, nil

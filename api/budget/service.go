@@ -30,7 +30,7 @@ func (s *Service) GetBudgets(ctx context.Context) ([]*Summary, error) {
 		} `json:"data"`
 	}{}
 
-	if err := s.c.GET(ctx, "/budgets", &resModel); err != nil {
+	if err := s.c.Get(ctx, "/budgets", &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Budgets, nil
@@ -52,7 +52,7 @@ func (s *Service) GetBudget(ctx context.Context, budgetID string, f *api.Filter)
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -80,7 +80,7 @@ func (s *Service) GetBudgetSettings(ctx context.Context, budgetID string) (*Sett
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/settings", budgetID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 

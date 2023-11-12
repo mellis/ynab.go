@@ -38,7 +38,7 @@ func (s *Service) GetTransactions(ctx context.Context, budgetID string, f *Filte
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -55,7 +55,7 @@ func (s *Service) GetTransaction(ctx context.Context, budgetID string, transacti
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/%s", budgetID, transactionID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Transaction, nil
@@ -90,7 +90,7 @@ func (s *Service) CreateTransactions(ctx context.Context, budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions", budgetID)
-	err = s.c.POST(ctx, url, &resModel, buf)
+	err = s.c.Post(ctx, url, &resModel, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (s *Service) BulkCreateTransactions(ctx context.Context, budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/bulk", budgetID)
-	if err := s.c.POST(ctx, url, &resModel, buf); err != nil {
+	if err := s.c.Post(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Bulk, nil
@@ -150,7 +150,7 @@ func (s *Service) UpdateTransaction(ctx context.Context, budgetID string, transa
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions/%s", budgetID, transactionID)
-	if err := s.c.PUT(ctx, url, &resModel, buf); err != nil {
+	if err := s.c.Put(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Transaction, nil
@@ -177,7 +177,7 @@ func (s *Service) UpdateTransactions(ctx context.Context, budgetID string,
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/transactions", budgetID)
-	err = s.c.PATCH(ctx, url, &resModel, buf)
+	err = s.c.Patch(ctx, url, &resModel, buf)
 	if err != nil {
 		return nil, err
 	}
@@ -201,7 +201,7 @@ func (s *Service) GetTransactionsByAccount(ctx context.Context, budgetID string,
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -225,7 +225,7 @@ func (s *Service) GetTransactionsByCategory(ctx context.Context, budgetID string
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -249,7 +249,7 @@ func (s *Service) GetTransactionsByPayee(ctx context.Context, budgetID string, p
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -267,7 +267,7 @@ func (s *Service) GetScheduledTransactions(ctx context.Context, budgetID string)
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/scheduled_transactions", budgetID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -284,7 +284,7 @@ func (s *Service) GetScheduledTransaction(ctx context.Context, budgetID, schedul
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/scheduled_transactions/%s", budgetID, scheduledTransactionID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.ScheduledTransactions, nil

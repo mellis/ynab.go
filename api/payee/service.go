@@ -36,7 +36,7 @@ func (s *Service) GetPayees(ctx context.Context, budgetID string, f *api.Filter)
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return &SearchResultSnapshot{
@@ -55,7 +55,7 @@ func (s *Service) GetPayee(ctx context.Context, budgetID string, payeeID string)
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payees/%s", budgetID, payeeID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Payee, nil
@@ -71,7 +71,7 @@ func (s *Service) GetPayeeLocations(ctx context.Context, budgetID string) ([]*Lo
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payee_locations", budgetID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocations, nil
@@ -87,7 +87,7 @@ func (s *Service) GetPayeeLocation(ctx context.Context, budgetID string, payeeLo
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payee_locations/%s", budgetID, payeeLocationID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocation, nil
@@ -103,7 +103,7 @@ func (s *Service) GetPayeeLocationsByPayee(ctx context.Context, budgetID, payeeI
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/payees/%s/payee_locations", budgetID, payeeID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.PayeeLocations, nil

@@ -10,14 +10,14 @@ import "context"
 
 // ClientReader contract for a read only client
 type ClientReader interface {
-	GET(ctx context.Context, url string, responseModel interface{}) error
+	Get(ctx context.Context, url string, responseModel interface{}) error
 }
 
 // ClientWriter contract for a write only client
 type ClientWriter interface {
-	POST(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
-	PUT(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
-	PATCH(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
+	Post(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
+	Put(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
+	Patch(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error
 }
 
 // ClientReaderWriter contract for a read-write client

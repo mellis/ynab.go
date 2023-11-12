@@ -38,7 +38,7 @@ func (s *Service) GetCategories(ctx context.Context, budgetID string, f *api.Fil
 	if f != nil {
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -58,7 +58,7 @@ func (s *Service) GetCategory(ctx context.Context, budgetID string, categoryID s
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/categories/%s", budgetID, categoryID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil
@@ -86,7 +86,7 @@ func (s *Service) getCategoryForMonth(ctx context.Context, budgetID string, cate
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/months/%s/categories/%s", budgetID, month, categoryID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil
@@ -131,7 +131,7 @@ func (s *Service) updateCategoryForMonth(ctx context.Context, budgetID string, c
 	url := fmt.Sprintf("/budgets/%s/months/%s/categories/%s", budgetID,
 		month, categoryID)
 
-	if err := s.c.PUT(ctx, url, &resModel, buf); err != nil {
+	if err := s.c.Put(ctx, url, &resModel, buf); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Category, nil

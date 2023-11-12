@@ -119,23 +119,23 @@ func (c *client) RateLimit() *api.RateLimit {
 	return c.rateLimit
 }
 
-// GET sends a GET request to the YNAB API
-func (c *client) GET(ctx context.Context, url string, responseModel interface{}) error {
+// Get sends a Get request to the YNAB API
+func (c *client) Get(ctx context.Context, url string, responseModel interface{}) error {
 	return c.do(ctx, http.MethodGet, url, responseModel, nil)
 }
 
-// POST sends a POST request to the YNAB API
-func (c *client) POST(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+// Post sends a Post request to the YNAB API
+func (c *client) Post(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
 	return c.do(ctx, http.MethodPost, url, responseModel, requestBody)
 }
 
-// PUT sends a PUT request to the YNAB API
-func (c *client) PUT(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+// Put sends a Put request to the YNAB API
+func (c *client) Put(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
 	return c.do(ctx, http.MethodPut, url, responseModel, requestBody)
 }
 
-// PATCH sends a PATCH request to the YNAB API
-func (c *client) PATCH(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
+// Patch sends a Patch request to the YNAB API
+func (c *client) Patch(ctx context.Context, url string, responseModel interface{}, requestBody []byte) error {
 	return c.do(ctx, http.MethodPatch, url, responseModel, requestBody)
 }
 

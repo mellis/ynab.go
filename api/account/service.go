@@ -35,7 +35,7 @@ func (s *Service) GetAccounts(ctx context.Context, budgetID string, f *api.Filte
 	if f != nil {
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 
@@ -55,7 +55,7 @@ func (s *Service) GetAccount(ctx context.Context, budgetID string, accountID str
 	}{}
 
 	url := fmt.Sprintf("/budgets/%s/accounts/%s", budgetID, accountID)
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Account, nil

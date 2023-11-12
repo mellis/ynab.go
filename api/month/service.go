@@ -36,7 +36,7 @@ func (s *Service) GetMonths(ctx context.Context, budgetID string, f *api.Filter)
 		url = fmt.Sprintf("%s?%s", url, f.ToQuery())
 	}
 
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return &SearchResultSnapshot{
@@ -56,7 +56,7 @@ func (s *Service) GetMonth(ctx context.Context, budgetID string, month api.Date)
 
 	url := fmt.Sprintf("/budgets/%s/months/%s", budgetID,
 		api.DateFormat(month))
-	if err := s.c.GET(ctx, url, &resModel); err != nil {
+	if err := s.c.Get(ctx, url, &resModel); err != nil {
 		return nil, err
 	}
 	return resModel.Data.Month, nil
