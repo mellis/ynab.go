@@ -26,10 +26,11 @@ type Service struct {
 // GetTransactions fetches the list of transactions from
 // a budget with filtering capabilities
 // https://api.youneedabudget.com/v1#/Transactions/getTransactions
-func (s *Service) GetTransactions(ctx context.Context, budgetID string, f *Filter) ([]*Transaction, error) {
+func (s *Service) GetTransactions(ctx context.Context, budgetID string, f *Filter) ([]*Transaction, uint64, error) {
 	resModel := struct {
 		Data struct {
-			Transactions []*Transaction `json:"transactions"`
+			Transactions    []*Transaction `json:"transactions"`
+			ServerKnowledge uint64         `json:"server_knowledge"`
 		} `json:"data"`
 	}{}
 
@@ -39,10 +40,10 @@ func (s *Service) GetTransactions(ctx context.Context, budgetID string, f *Filte
 	}
 
 	if err := s.c.Get(ctx, url, &resModel); err != nil {
-		return nil, err
+		return nil, 0, err
 	}
 
-	return resModel.Data.Transactions, nil
+	return resModel.Data.Transactions, resModel.Data.ServerKnowledge, nil
 }
 
 // GetTransaction fetches a specific transaction from a budget
@@ -294,6 +295,10 @@ func (s *Service) GetScheduledTransaction(ctx context.Context, budgetID, schedul
 type Filter struct {
 	Since *api.Date
 	Type  *Status
+	// LastKnowledgeOfServer The starting server knowledge. If provided,
+	// only entities that have changed since last_knowledge_of_server
+	// will be included
+	LastKnowledgeOfServer *uint64
 }
 
 // ToQuery returns the filters as a HTTP query string
@@ -305,6 +310,9 @@ func (f *Filter) ToQuery() string {
 	}
 	if f.Type != nil {
 		pairs = append(pairs, fmt.Sprintf("type=%s", string(*f.Type)))
+	}
+	if f.LastKnowledgeOfServer != nil {
+		pairs = append(pairs, fmt.Sprintf("last_knowledge_of_server=%d", *f.LastKnowledgeOfServer))
 	}
 	return strings.Join(pairs, "&")
 }
