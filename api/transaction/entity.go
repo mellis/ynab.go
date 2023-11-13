@@ -21,11 +21,14 @@ type Transaction struct {
 	AccountName     string            `json:"account_name"`
 	SubTransactions []*SubTransaction `json:"subtransactions"`
 
-	Memo              *string    `json:"memo"`
-	FlagColor         *FlagColor `json:"flag_color"`
-	PayeeID           *string    `json:"payee_id"`
-	CategoryID        *string    `json:"category_id"`
-	TransferAccountID *string    `json:"transfer_account_id"`
+	Memo                  *string    `json:"memo"`
+	FlagColor             *FlagColor `json:"flag_color"`
+	PayeeID               *string    `json:"payee_id"`
+	CategoryID            *string    `json:"category_id"`
+	TransferAccountID     *string    `json:"transfer_account_id"`
+	TransferTransactionID *string    `json:"transfer_transaction_id"`
+	MatchedTransactionID  *string    `json:"matched_transaction_id"`
+
 	// ImportID If the Transaction was imported, this field is a unique (by account) import
 	// identifier. If this transaction was imported through File Based Import or
 	// Direct Import and not through the API, the import_id will have the format:
@@ -34,7 +37,12 @@ type Transaction struct {
 	// 'YNAB:-294230:2015-12-30:1’. If a second transaction on the same account
 	// was imported and had the same date and same amount, its import_id would
 	// be 'YNAB:-294230:2015-12-30:2’.
-	ImportID     *string `json:"import_id"`
+	ImportID                *string `json:"import_id"`
+	ImportPayeeName         *string `json:"import_payee_name"`
+	ImportPayeeNameOriginal *string `json:"import_payee_name_original"`
+
+	DebtTransactionType *string `json:"debt_transaction_type"`
+
 	PayeeName    *string `json:"payee_name"`
 	CategoryName *string `json:"category_name"`
 }
@@ -77,12 +85,15 @@ type SubTransaction struct {
 	// Deleted Deleted sub-transactions will only be included in delta requests.
 	Deleted bool `json:"deleted"`
 
-	Memo       *string `json:"memo"`
-	PayeeID    *string `json:"payee_id"`
-	CategoryID *string `json:"category_id"`
+	Memo         *string `json:"memo"`
+	PayeeID      *string `json:"payee_id"`
+	PayeeName    *string `json:"payee_name"`
+	CategoryID   *string `json:"category_id"`
+	CategoryName *string `json:"category_name"`
 	// TransferAccountID If a transfer, the account_id which the
 	// sub-transaction transfers to
-	TransferAccountID *string `json:"transfer_account_id"`
+	TransferAccountID     *string `json:"transfer_account_id"`
+	TransferTransactionID *string `json:"transfer_transaction_id"`
 }
 
 // Hybrid represents a hybrid transaction
